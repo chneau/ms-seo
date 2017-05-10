@@ -14,14 +14,14 @@ SEO =
       set: ['description', 'url', 'title']
   }
 
-  # e.g. ignore('meta', 'fragment')
+# e.g. ignore('meta', 'fragment')
   ignore: (type, value) ->
     @settings.ignore[type].push(value) if @settings.ignore[type] and _.indexOf(@settings.ignore[type], value) is -1
 
   config: (settings) ->
     _.extend(@settings, settings)
 
-  set: (options, clearBefore=true) ->
+  set: (options, clearBefore = true) ->
     @clearAll() if clearBefore
 
     currentRouter = Router.current()
@@ -61,7 +61,7 @@ SEO =
     # or as object {rel: href}
     if link and _.isArray(link)
       for l in link
-        @setLink(l.rel, l.href)
+        @setLink(l.rel, l.href, l.href_lang)
     else if link and _.isObject(link)
       for k, v of link
         @setLink(k, v)
@@ -113,7 +113,7 @@ SEO =
       if @settings.auto.og
         @setMeta 'property="og:url"', url
 
-  setLink: (rel, href, unique=true) ->
+  setLink: (rel, href, hreflang, unique = true) ->
     @removeLink(rel) if unique
     if _.isArray(href)
       for h in href
@@ -121,12 +121,15 @@ SEO =
       return
 
     if href
-      $('head').append("<link rel='#{rel}' href='#{href}'>")
+      if rel == "alternate"
+        $('head').append("<link rel='#{rel}' href='#{href}' hreflang='#{hreflang}'>")
+      else
+        $('head').append("<link rel='#{rel}' href='#{href}'>")
 
   removeLink: (rel) ->
     $("link[rel='#{rel}']").remove()
 
-  setMeta: (attr, content, unique=true) ->
+  setMeta: (attr, content, unique = true) ->
     @removeMeta(attr) if unique
     if _.isArray(content)
       for v in content
@@ -161,14 +164,14 @@ getCurrentRouteName = ->
   return routeName
 
 # Get seo settings depending on route
-Deps.autorun( ->
+Deps.autorun(->
   currentRouteName = getCurrentRouteName()
   return unless currentRouteName
   Meteor.subscribe('seoByRouteName', currentRouteName)
 )
 
 # Set seo settings depending on route
-Deps.autorun( ->
+Deps.autorun(->
   return unless SEO
   currentRouteName = getCurrentRouteName()
   settings = SeoCollection.findOne({route_name: currentRouteName}) or {}

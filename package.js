@@ -1,8 +1,8 @@
 Package.describe({
-  name: "manuelschoebel:ms-seo",
+  name: "alicankemik:ms-seo",
   summary: "Easily config SEO for your routes",
   git: "https://github.com/DerMambo/ms-seo.git",
-  version: "0.4.1"
+  version: "0.4.5"
 });
 
 Package.onUse(function(api){
