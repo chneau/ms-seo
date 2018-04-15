@@ -32,6 +32,7 @@ SEO =
     og = options.og
     link = options.link
     twitter = options.twitter
+    json_ld = options.json_ld
 
     @setTitle options.title if options.title
 
@@ -77,6 +78,11 @@ SEO =
     # set google+ rel author
     @setLink 'author', options.rel_author if options.rel_author
 
+    #set json-ld
+    if json_ld and _.isArray(json_ld)
+      for j in json_ld
+        @setJson(j)
+
   clearAll: ->
     for m in $("meta")
       $m = $(m)
@@ -95,6 +101,9 @@ SEO =
       $l = $(l)
       controlled = $l.attr 'rel'
       $l.remove() if _.indexOf(SEO.settings.ignore.link, $l.attr('rel')) is -1 and controlled
+    
+    $("script[type='application/ld+json'").remove()
+
     @set(@settings, false)
     @setTitle(@settings.title)
 
@@ -113,7 +122,7 @@ SEO =
       if @settings.auto.og
         @setMeta 'property="og:url"', url
 
-  setLink: (rel, href, hreflang, unique = true) ->
+  setLink: (rel, href, hreflang, unique = false) ->
     @removeLink(rel) if unique
     if _.isArray(href)
       for h in href
@@ -151,6 +160,16 @@ SEO =
   removeMeta: (attr) ->
     $("meta[#{attr}]").remove()
 
+  setJson: (content) ->
+    if _.isArray(content)
+      for c in content
+        @setScript(c)
+      return
+    
+    $('head').append("<script type='application/ld+json'>#{content}</script>")
+
+  removeJson: () ->
+    $("script[type='application/ld+json']").remove()
 
 @SEO = SEO
 
