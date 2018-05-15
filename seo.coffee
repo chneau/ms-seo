@@ -102,7 +102,7 @@ SEO =
       controlled = $l.attr 'rel'
       $l.remove() if _.indexOf(SEO.settings.ignore.link, $l.attr('rel')) is -1 and controlled
     
-    $("script[type='application/ld+json'").remove()
+    $("script[type='application/ld+json']").remove()
 
     @set(@settings, false)
     @setTitle(@settings.title)
