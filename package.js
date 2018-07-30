@@ -1,11 +1,11 @@
 Package.describe({
-  name: "nachomg:ms-seo",
+  name: "chneau:ms-seo",
   summary: "Easily config SEO for your routes",
-  git: "https://github.com/DerMambo/ms-seo.git",
+  git: "https://github.com/chneau/ms-seo.git",
   version: "0.4.6"
 });
 
-Package.onUse(function(api){
+Package.onUse(function (api) {
 
   api.versionsFrom('1.0');
 
@@ -14,7 +14,7 @@ Package.onUse(function(api){
   api.use([
     'jquery',
     'deps',
-    'iron:router@1.0.0'
+    'iron:router@1.1.2'
   ], 'client');
 
   api.addFiles([
